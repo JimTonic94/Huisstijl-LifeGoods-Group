@@ -1,0 +1,150 @@
+/* LifeGoods Group — huisstijl.
+   Eén bron voor kleuren en fonts, gedeeld door alle dashboards. Palet uit
+   MEESTERPROMPT.md van de presentatiesjablonen, zodat dashboards, kalender en
+   presentaties dezelfde kleuren spreken.
+
+   Dit bestand is een KOPIE. Bewerk hem niet hier, maar in de huisstijl-repo en
+   haal hem daarna opnieuw op:
+
+     curl -sO https://raw.githubusercontent.com/<org>/lifegoods-huisstijl/main/huisstijl.css
+
+   Twee afspraken waar elke app zich aan houdt:
+   - Laad dit bestand vóór je eigen styles.css.
+   - Het thema staat als data-thema="licht|donker" op <html>.
+
+   Alleen tokens, geen opmaakregels. Wat één app eigen is — baankleuren,
+   statusvlakken die nergens anders bestaan — hoort in die app zelf. */
+
+/* De fonts erbij. Zonder deze regel valt iedereen zonder Poppins en Lexend op
+   zijn schijf terug op system-ui, en dan is "dezelfde huisstijl" een wens. */
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Poppins:wght@600&display=swap");
+
+:root {
+  color-scheme: light;
+
+  --navy: #2C3A6B;
+  --mint: #02D090;
+  --grijsblauw: #5A6685;
+  --periwinkle: #A9B4DA;
+  --lavendel: #DBE0F0;
+  --scheiding: #C3CBE2;
+
+  --page: #F6F7FC;
+  --surface: #FFFFFF;
+  --surface-zacht: #FBFCFE;
+
+  --tekst: #232B45;
+  --tekst-zacht: #5A6685;
+  --tekst-stil: #8892AE;
+
+  --rand: #E4E8F4;
+  --rand-sterk: #C3CBE2;
+
+  /* Mint zelf zakt op wit door de contrasteis, dus tekst krijgt een donkerder
+     groen en mint blijft voor vlakken en randen. */
+  --op: #01865D;
+  --neer: #C0392B;
+  --waarschuwing: #B26B00;
+  --waarschuwing-rand: #E8A33D;
+
+  --kanaal-organisch: #02D090;
+  --kanaal-betaald: #2C3A6B;
+  --kanaal-email: #7C8AB8;
+  --kanaal-direct: #A9B4DA;
+  --kanaal-overig: #C3CBE2;
+
+  --schaduw: 0 1px 2px rgba(44, 58, 107, .06), 0 6px 20px rgba(44, 58, 107, .06);
+  --schaduw-hoog: 0 8px 28px rgba(44, 58, 107, .14);
+  --radius: 14px;
+  --radius-klein: 9px;
+
+  --kop: "Poppins SemiBold", "Poppins", "Lexend", "Inter", system-ui, sans-serif;
+  --body: "Lexend", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Rolgebonden tokens. Navy staat hierboven als merkkleur; hieronder staat
+     waar die kleur voor dient. Dat onderscheid is wat het donkere thema
+     mogelijk maakt: daar wordt koptekst licht terwijl een gevuld vlak juist
+     donkerblauw moet blijven — één omgekeerde --navy zou allebei slopen. */
+  --kopkleur: var(--navy);          /* koppen, getallen, nadruktekst */
+  --accent-sterk: var(--navy);      /* gevulde vlakken: actieve chip, melding */
+  --accent-sterk-hover: #223057;
+  --accent-tekst: #FFFFFF;          /* tekst óp zo'n vlak */
+
+  /* Het plaatje achter een merklogo. De woordmerken zijn donkere PNG's zonder
+     eigen achtergrond, dus dit vlak blijft licht — ook in het donkere thema,
+     anders verdwijnen de logo's. */
+  --plaat: #FFFFFF;
+
+  --vlak-waarschuwing: #FDF8EF;
+  --rand-waarschuwing-zacht: #F0DDBB;
+  --vlak-waarschuwing-sterk: #FAECD3;
+  --vlak-fout: #FDF2F0;
+  --rand-fout-zacht: #F3D2CC;
+  --vlak-fout-sterk: #FBE0DC;
+  --vlak-fout-hover: #FBE9E7;
+  --vlak-blocker: #FDF4F2;
+  --vlak-blocker-hover: #FFF9F8;
+
+}
+
+/* ---------------- donker thema ----------------
+   Het thema staat als data-thema op <html>. "systeem" bestaat alleen als
+   instelling: app.js rekent die keuze om naar licht of donker en luistert naar
+   prefers-color-scheme, zodat er hier maar één donkere set nodig is.
+
+   Alleen de tokens wisselen — geen enkele regel verderop kent het thema. */
+html[data-thema="donker"] {
+  color-scheme: dark;
+
+  --grijsblauw: #A3AECF;
+  --periwinkle: #5D6A96;
+  --lavendel: #232C48;
+  --scheiding: #3A4467;
+
+  --page: #12172A;
+  --surface: #1A2138;
+  --surface-zacht: #1E2640;
+
+  --tekst: #E7EBF7;
+  --tekst-zacht: #AEB8D6;
+  --tekst-stil: #8792B6;
+
+  --rand: #2C3552;
+  --rand-sterk: #3E4A72;
+
+  /* Op donker draaien de contrastverhoudingen om: het donkere groen en rood
+     van het lichte thema zijn hier onleesbaar, dus die gaan omhoog in helderheid. */
+  --op: #35DFA6;
+  --neer: #FF8E7E;
+  --waarschuwing: #E8B25C;
+  --waarschuwing-rand: #C08A34;
+
+  --kopkleur: #E8ECF8;
+  --accent-sterk: #4A5C9E;
+  --accent-sterk-hover: #586BB2;
+  --accent-tekst: #FFFFFF;
+  --plaat: #EDF0F9;
+
+  /* Betaald is in het lichte thema navy; op een donkere pagina valt dat weg
+     tegen de achtergrond. De hele reeks schuift daarom omhoog, met dezelfde
+     aflopende volgorde als in het licht: betaald het sterkst, overig het
+     zwakst. Zonder die volgorde wisselen de kanalen in de balk van gewicht. */
+  --kanaal-betaald: #93A2D6;
+  --kanaal-email: #6E7CB0;
+  --kanaal-direct: #4E5C8E;
+  --kanaal-overig: #333F63;
+
+  --vlak-waarschuwing: #2C2417;
+  --rand-waarschuwing-zacht: #4A3B1E;
+  --vlak-waarschuwing-sterk: #3A2E17;
+  --vlak-fout: #2C1D1B;
+  --rand-fout-zacht: #4C2B26;
+  --vlak-fout-sterk: #3D2320;
+  --vlak-fout-hover: #3A211E;
+  --vlak-blocker: #281A19;
+  --vlak-blocker-hover: #33201E;
+
+
+  --schaduw: 0 1px 2px rgba(0, 0, 0, .40), 0 6px 20px rgba(0, 0, 0, .34);
+  --schaduw-hoog: 0 8px 28px rgba(0, 0, 0, .50);
+}
