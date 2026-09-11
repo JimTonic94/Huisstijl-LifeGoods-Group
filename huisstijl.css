@@ -13,11 +13,31 @@
    - Het thema staat als data-thema="licht|donker" op <html>.
 
    Alleen tokens, geen opmaakregels. Wat één app eigen is — baankleuren,
-   statusvlakken die nergens anders bestaan — hoort in die app zelf. */
+   statusvlakken die nergens anders bestaan — hoort in die app zelf.
 
-/* De fonts erbij. Zonder deze regel valt iedereen zonder Poppins en Lexend op
-   zijn schijf terug op system-ui, en dan is "dezelfde huisstijl" een wens. */
-@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Poppins:wght@600&display=swap");
+   ── Uitbreiding 11-09-2026 ──────────────────────────────────────────────
+   Aangevuld voor de vier dashboards van het e-commerceteam: AssortimentManager,
+   Webshopportaal, HR-dashboard en Stageportaal. Dat zijn datagrids met
+   sorteerbare tabellen van duizenden rijen, KPI-stroken en grafieken met tot
+   zes reeksen — plaatsen die de oorspronkelijke set niet kende. Alles wat
+   erbij kwam staat gemarkeerd met NIEUW, alles wat van waarde veranderde met
+   GEWIJZIGD, en bij elke wijziging staat de gemeten reden.
+
+   Elke kleurcombinatie die in een interface voorkomt is nagerekend tegen
+   WCAG 2.1 (1.4.3 voor tekst, 1.4.11 voor randen en grafische elementen) met
+   controleer-contrast.py in deze repo. Dat script hoort bij dit bestand: het
+   faalt met exitcode 1 zodra een wijziging hier een drempel breekt. Draai het
+   vóór je een kleur aanpast, niet erna.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* De fonts erbij. Zonder deze regel valt iedereen zonder Poppins en Inter op
+   zijn schijf terug op system-ui, en dan is "dezelfde huisstijl" een wens.
+
+   Een app die de fonts zélf meelevert — een Next-app met next/font/google, of
+   een omgeving zonder internet — laat deze regel weg bij het overnemen en zet
+   dezelfde twee families in --kop en --body. Dat is geen afwijking van de
+   huisstijl: het is dezelfde huisstijl zonder een externe request per pagina. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600&display=swap");
 
 :root {
   color-scheme: light;
@@ -33,33 +53,176 @@
   --surface: #FFFFFF;
   --surface-zacht: #FBFCFE;
 
+  /* NIEUW — de rij onder de cursor in een tabel. Niet --surface-zacht
+     hergebruiken: dat vlak is de tabelkop en de vulling van een input, en die
+     staan tegelijk met een hover-rij in beeld. Wie dezelfde tint voor allebei
+     neemt verliest zijn regel zodra hij over de kop scrollt. Deze tint is
+     1,15:1 tegen een gewone rij — geen WCAG-eis, wel het verschil tussen wel
+     en niet je regel vasthouden in een tabel van veertig kolommen. */
+  --rij-hover: #EDEFF8;
+
   --tekst: #232B45;
-  --tekst-zacht: #5A6685;
+  /* GEWIJZIGD — was #5A6685. Die haalde 4,34:1 op --lavendel en zakte daarmee
+     onder de 4,5:1 voor tekst. Lavendel is de tint van een geselecteerde rij,
+     en daar staat metadata op. Twee punten donkerder: 4,53:1, zichtbaar
+     identiek. --grijsblauw houdt zijn oorspronkelijke waarde — dat is de
+     merkkleur, dit is de tekstrol. */
+  --tekst-zacht: #586381;
   --tekst-stil: #8892AE;
 
   --rand: #E4E8F4;
   --rand-sterk: #C3CBE2;
+  /* NIEUW — rijscheiding bínnen een tabel. --rand is de rand ómheen een kaart;
+     in een tabel van duizend rijen is diezelfde lijn duizend keer een streep
+     en wordt het raster luider dan de cijfers. */
+  --rand-zacht: #EFF1F8;
+  /* NIEUW — de rand van een input en van een uitgeschakelde knop. WCAG 1.4.11
+     eist 3:1 voor de begrenzing van een bedieningselement; --rand-sterk haalt
+     1,51:1 op de pagina en is dus decoratief, niet functioneel. Deze haalt
+     3,27:1 op het slechtste van de drie oppervlakken waar een input kan staan.
+     --rand-sterk blijft ongewijzigd voor scheidingen en kaartranden. */
+  --rand-control: #7A88B4;
 
   /* Mint zelf zakt op wit door de contrasteis, dus tekst krijgt een donkerder
-     groen en mint blijft voor vlakken en randen. */
-  --op: #01865D;
-  --neer: #C0392B;
-  --waarschuwing: #B26B00;
+     groen en mint blijft voor vlakken en randen.
+     GEWIJZIGD — was #01865D. Dat haalde 4,60:1 op wit maar 4,30:1 op --page,
+     4,48:1 op --surface-zacht en 3,49:1 op --lavendel: de drie plekken waar
+     een groen getal in een dashboard juist staat (deltaregel op de pagina,
+     waarde in de tabelkop-tint, waarde op een geselecteerde rij). Nu 4,52:1 op
+     het slechtste van de vier.
+
+     GEWIJZIGD 11-09-2026, tweede ronde — hier stond "voor een sparkline of
+     grafieklijn gebruik je --mint of --reeks-2, niet dit". Dat klopte niet, en
+     het heeft schade gedaan: --mint haalt als lijn op wit 1,93:1 en zit daarmee
+     onder de 3:1 van WCAG 1.4.11. Precies diezelfde meting stond 45 regels
+     verderop bij --kanaal-organisch, waar mint er juist om die reden al uit was
+     gehaald -- twee regels in een bestand die elkaar tegenspraken.
+
+     Voor een POSITIEVE lijn of vulling -- een sparkline, de tint achter een
+     weekblok in een tabel -- gebruik je gewoon --op. Dat is geen concessie maar
+     het betere antwoord: --op en --neer hebben nagenoeg dezelfde luminantie
+     (0,126 tegen 0,126), dus groen en rood wegen naast elkaar even zwaar. Met
+     mint woog het groen 3,7x zo licht als het rood, en dan schreeuwt elke
+     stijgende lijn in een tabel van veertig kolommen terwijl een dalende
+     fluistert -- terwijl beide even belangrijk zijn. Voor een NEUTRALE reeks in
+     een grafiek met meerdere lijnen blijft --reeks-2 het antwoord. */
+  --op: #01724F;
+  /* NIEUW — achtergrond van een positieve chip. De tegenhanger van --vlak-fout,
+     die er al was. Zonder deze token heeft een "+6,4%"-chip geen vlak en een
+     "−1,1 pt"-chip wel, en dan lijkt alleen het slechte nieuws een label. */
+  --vlak-op: #E3F5EE;
+  /* GEWIJZIGD — was #C0392B, 4,13:1 op --lavendel. Nu 4,52:1 op het slechtste
+     van de vier oppervlakken. */
+  --neer: #B53629;
+  /* GEWIJZIGD — was #B26B00. Dat haalde 3,97:1 in zijn eigen waarschuwingschip
+     (--vlak-waarschuwing) en 3,60:1 op --vlak-waarschuwing-sterk: de chip was
+     de enige plek waar deze kleur voorkomt, en precies daar faalde hij. Nu
+     4,55:1 op het slechtste van de vier. */
+  --waarschuwing: #9B5D00;
   --waarschuwing-rand: #E8A33D;
 
-  --kanaal-organisch: #02D090;
-  --kanaal-betaald: #2C3A6B;
-  --kanaal-email: #7C8AB8;
-  --kanaal-direct: #A9B4DA;
-  --kanaal-overig: #C3CBE2;
+  /* NIEUW — de toetsenbordfocus. 2px ring, 2px offset. Dit is de enige token
+     waar een app niet omheen mag: zonder zichtbare focus is een dashboard met
+     de tab-toets onbedienbaar, en outline:none zonder vervanging is de meest
+     gemaakte toegankelijkheidsfout in een datagrid. Haalt 8,28:1 op het
+     slechtste van de vier oppervlakken waar hij tegenaan kan liggen. */
+  --focus: #2C3A6B;
+
+  /* NIEUW — grafiekreeksen op positie, niet op betekenis. --kanaal-* hieronder
+     zegt wát een lijn is; deze zeggen de hoeveelste hij is. Een dashboard met
+     zes KPI-lijnen in één grafiek heeft dat nodig en kan niet "organisch" of
+     "betaald" heten. Elke reeks haalt 3:1 op zowel --surface als --page, de
+     drempel voor een grafisch element.
+
+     Onderling liggen niet alle paren 3:1 uit elkaar, en dat hoeft ook niet:
+     reeksen worden op tint onderscheiden en elke reeks draagt daarnaast een
+     label of legenda. De 3:1-eis geldt tegen de áchtergrond, niet tussen twee
+     lijnen. */
+  --reeks-1: #2C3A6B;
+  --reeks-2: #01865D;
+  --reeks-3: #6D5BB8;
+  --reeks-4: #7C8AB8;
+  --reeks-5: #C4783F;
+  --reeks-6: #1F7A8C;
+
+  /* HERDEFINIEERD — de kanaalkleuren wijzen nu naar --reeks-*, zodat een kleur
+     op één plek staat. De toewijzing is dezelfde als voorheen op één na:
+     --kanaal-organisch was #02D090 (mint) en is nu --reeks-2 (#01865D), het
+     donkerder groen. Mint als lijn op wit haalt 1,93:1 en zit daarmee onder de
+     3:1 voor een grafisch element — de kanaalbalk was de laatste plek waar dat
+     nog stond. */
+  --kanaal-organisch: var(--reeks-2);
+  --kanaal-betaald: var(--reeks-1);
+  --kanaal-email: var(--reeks-4);
+  --kanaal-direct: var(--periwinkle);
+  --kanaal-overig: var(--scheiding);
 
   --schaduw: 0 1px 2px rgba(44, 58, 107, .06), 0 6px 20px rgba(44, 58, 107, .06);
+  /* NIEUW — de trede tussen --schaduw en --schaduw-hoog: een dropdown, een
+     popover, een kolomfilter. Zonder deze trede springt zo'n menu naar de
+     diepte van een modal en leest het als "de pagina is geblokkeerd". */
+  --schaduw-midden: 0 2px 6px rgba(44, 58, 107, .08), 0 10px 28px rgba(44, 58, 107, .10);
   --schaduw-hoog: 0 8px 28px rgba(44, 58, 107, .14);
+
   --radius: 14px;
   --radius-klein: 9px;
+  /* NIEUW — chip, statuslabel, tag. --radius-klein op een element van 18px
+     hoog is bijna een capsule; dit houdt een chip herkenbaar als chip. */
+  --radius-chip: 6px;
 
-  --kop: "Poppins SemiBold", "Poppins", "Lexend", "Inter", system-ui, sans-serif;
-  --body: "Lexend", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* GEWIJZIGD 11-09-2026 — twee rollen, en het onderscheid is het hele punt.
+     Poppins is een geometrisch displayfont: het zet de merkstem in een kop van
+     20px en in het woordmerk. Datzelfde karakter wordt in een kolomkop van
+     10px en in een bedrag juist ruis. Daarom draagt Poppins alleen nog de
+     koppen, en gaat alles eronder naar een neutrale grotesk.
+
+     --body was Lexend. Lexend is een léésbaarheidsfont — ontworpen voor
+     leesvloeiendheid, met ronde open vormen en een brede 1, 4 en 7. Precies
+     wat je in lopende tekst wilt, en precies wat een financiële tabel te
+     informeel maakt. Inter is de tegenhanger: neutraal, hoge x-hoogte, gemaakt
+     voor schermtekst op 10–13px. Hij stond al als terugval in deze regel.
+
+     ⚠️ Dit raakt Jims marketingkalender: die gaat van Lexend naar Inter voor
+     alle tekst onder de koppen.
+
+     Wil een app tóch Lexend voor échte lopende leestekst — de leerstof in het
+     Stageportaal is het enige geval dat we kennen — dan laadt díe app hem zelf
+     en zet hem in zijn eigen styles.css. Dat is een app-ding en hoort dus niet
+     in dit bestand; hier drie families laden kost iedereen een extra request
+     voor een rol die één app heeft. */
+  --kop: "Poppins SemiBold", "Poppins", "Inter", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Getallen: altijd `font-variant-numeric: tabular-nums`. Dat is geen
+     verfraaiing maar een eis — Inters proportionele `1` is 39px waar de `0`
+     60px is (gemeten op 16px), dus zonder deze regel springt elke kolom bij
+     het scrollen. Met tabular-nums zijn beide 62px.
+
+     ⛔ Zet er GEEN `slashed-zero` bij. Dat lijkt logisch voor een dashboard,
+     maar de `zero`-feature zit niet in de Google-Fonts-uitlevering van Inter:
+     gemeten op 11-09-2026 gaf `slashed-zero` nul pixels verschil. Het is dus
+     een regel die niets doet en die iemand later gaat "repareren". Wie een
+     doorgestreepte nul echt nodig heeft, moet Inter zelf hosten met de
+     volledige featureset. */
+
+  /* NIEUW — de tekstschaal. Fonts zonder groottes laten elke app zijn eigen
+     hiërarchie verzinnen, en dan is een sectiekop in het ene dashboard groter
+     dan een paginakop in het andere. Poppins draait op 600, Lexend op 400 voor
+     body en 500/600 voor nadruk.
+
+     Deze acht zijn geijkt op een datagrid: dicht, om te scannen. Een app met
+     lopende tekst — leerstof, een formulier, een instellingenpagina — mag ze
+     in zijn eigen styles.css één stap ruimer zetten; dat is een app-keuze en
+     hoort dus niet hier. Getallen krijgen font-variant-numeric: tabular-nums,
+     anders springen de kolommen bij het scrollen. */
+  --maat-pagina: 20px;
+  --maat-kpi: 25px;
+  --maat-kpi-bij: 13px;
+  --maat-sectie: 14px;
+  --maat-tabel: 13px;
+  --maat-meta: 11.5px;
+  --maat-caption: 10.5px;
+  --maat-kolomkop: 10px;
 
   /* Rolgebonden tokens. Navy staat hierboven als merkkleur; hieronder staat
      waar die kleur voor dient. Dat onderscheid is wat het donkere thema
@@ -69,11 +232,101 @@
   --accent-sterk: var(--navy);      /* gevulde vlakken: actieve chip, melding */
   --accent-sterk-hover: #223057;
   --accent-tekst: #FFFFFF;          /* tekst óp zo'n vlak */
+  /* NIEUW — gedempte tekst óp een gevuld vlak: een teller, een code, een
+     bijregel onder een KPI. De tegenhanger van --tekst-zacht, maar dan op
+     --accent-sterk. Dit is een eigen token en geen opacity op --accent-tekst,
+     omdat een doorzichtige kleur niet na te rekenen is: de meting met 70%
+     dekking kwam in het donkere thema op 4,2:1 uit, onder de eis, en niets
+     had dat gemeld.
+
+     GEWIJZIGD 11-09-2026, tweede ronde -- was #B8C0D4 (6,07:1 op --accent-sterk).
+     Dat haalde de eis ruim, maar op een navy balk las het als grijs naast het
+     witte woordmerk ernaast, en grijs op donkerblauw oogt uitgezet. Nu 8,29:1.
+     Het blijft een eigen token en geen wit: het verschil met --accent-tekst
+     (1,34:1) is precies genoeg om "Instellingen" en een inactieve tab te laten
+     wijken voor de appnaam, zonder dat ze half uitgeschakeld lijken. */
+  --accent-tekst-zacht: #D8DFF0;
+  /* NIEUW — mint als detail óp een gevuld vlak: de markering in een actieve
+     chip, een streepje, een punt. Mint kan dit wél en op wit niet, omdat de
+     achtergrond hier donker is.
+
+     ⚠️ GEWIJZIGD 11-09-2026, derde ronde — hier stond "het deltacijfer in een
+     gevulde KPI-kaart" als eerste voorbeeld, en dat is precies waar het misging.
+     Twee dingen:
+
+     1. Het woord is **detail**. In de AssortimentManager stond hierdoor de hele
+        gevulde KPI-kaart in mint: de bijwaarde, de toelichtingsregel én de
+        delta, drie regels tekst. Mint haalt op navy 5,49:1 en is dus leesbaar,
+        maar verzadigd mintgroen over hele regels leest als een waarschuwing die
+        er niet is. Bijtekst op een gevuld vlak is --accent-tekst-zacht.
+     2. Een delta heeft **twee richtingen**. Mint is er maar één, dus stond een
+        daling van -5,3 pt daar in groen terwijl dezelfde daling op elke andere
+        kaart rood is. Daar zijn nu twee eigen tokens voor, hieronder.
+
+     Mint blijft wat het is: een merkmarkering op een donker vlak, en geen
+     statuskleur. */
+  --accent-op-vlak: var(--mint);
+
+  /* NIEUW 11-09-2026 — positief en negatief óp een gevuld vlak. De tegenhangers
+     van --op en --neer, maar dan voor navy als ondergrond: die twee zijn
+     gekozen voor een licht oppervlak en halen op --accent-sterk 1,33:1
+     respectievelijk 1,40:1 — volstrekt onleesbaar.
+
+     Zelfde ontwerpregel als bij --op/--neer zelf: de twee zijn op luminantie
+     tegen elkaar gelegd (0,4599 tegen 0,4660, 1,3% uit elkaar), zodat een
+     stijging en een daling op zo'n kaart even zwaar wegen. En allebei bewust
+     gedempter dan mint: dit is tekst, geen markering. */
+  --op-op-vlak: #6AC6A0;
+  --neer-op-vlak: #F2A197;
+  /* NIEUW — tekst op --lavendel. Lavendel is de tint van een geselecteerde rij
+     en van een actieve tab; zonder eigen token pakt iedereen --tekst of --navy
+     en is het per app anders. */
+  --lavendel-tekst: var(--navy);
 
   /* Het plaatje achter een merklogo. De woordmerken zijn donkere PNG's zonder
      eigen achtergrond, dus dit vlak blijft licht — ook in het donkere thema,
      anders verdwijnen de logo's. */
   --plaat: #FFFFFF;
+
+  /* NIEUW 14-09-2026 — de zwevende appbalk van de lgg-hub-portalen. Eigen
+     token en niet --accent-sterk, want die twee moeten in het donkere thema
+     uit elkaar: --accent-sterk is een gevuld MERKvlak (actieve chip, melding,
+     de ene gevulde KPI-kaart) en blijft daar navy; de balk is CHROME en wijkt.
+
+     Waarom de balk in donker geen navy meer is: de pagina is daar zelf
+     donkerblauw (#12172A), dus een navy balk (#384678) is blauw op blauw en
+     leest vaal in plaats van krachtig. Besluit van Cehdi, 14-09-2026 ("als ik
+     naar dark-mode switch blijft die header balk blauw, dat vind ik niet
+     mooi"). In donker is de balk daarom --surface: het merk zit dan in het
+     woordmerk en de actieve tegel in plaats van in een gekleurd vlak.
+
+     ⚠️ De balk is in donker maar 1,12:1 van de pagina; hij leunt op de
+     SCHADUW en de marge om te zweven. Neem hem dus niet over zonder schaduw,
+     en let op dat een zwarte schaduw met lage alpha op een donkere pagina
+     niets doet — vandaar de hoge alpha in --schaduw-hoog. In het lichte thema
+     verandert er niets: de balk is en blijft de merknavy.
+
+     Alle tekstrollen op de balk blijven ongewijzigd werken: --accent-tekst
+     haalt 15,93:1, --accent-tekst-zacht 12,50:1 en de lichte tegel eronder
+     9,58:1. Dat is de hele reden dat deze variant gekozen is boven een lichte
+     balk: er klapt niets om tussen de thema's. */
+  --balk: var(--navy);
+  --balk-hover: var(--accent-sterk-hover);
+
+  /* NIEUW 11-09-2026 — de lichte tegel óp een gevuld navy vlak, en de tekst
+     erop. Ontstaan bij de zwevende navy topbar: de actieve tab is daar een
+     lichte pil op de balk.
+
+     ⚠️ Deze twee blijven licht respectievelijk donker in BEIDE thema's, net
+     als --plaat hierboven en om dezelfde reden. Wie hier --surface en
+     --kopkleur voor gebruikt krijgt precies de fout die de eerste versie van
+     deze balk had: in het donkere thema is --surface (#1A2138) dónkerder dan
+     de balk (#384678), dus de "lichte" actieve tab werd een donker gat, en
+     --kopkleur is daar bijna-wit en dus onleesbaar op een lichte tegel. De rol
+     klapte om tussen de thema's — dezelfde klasse fout als --brand die zowel
+     tekst- als vulkleur was. */
+  --tegel-op-vlak: #FFFFFF;
+  --tegel-op-vlak-tekst: #2C3A6B;
 
   --vlak-waarschuwing: #FDF8EF;
   --rand-waarschuwing-zacht: #F0DDBB;
@@ -104,6 +357,7 @@ html[data-thema="donker"] {
   --page: #12172A;
   --surface: #1A2138;
   --surface-zacht: #1E2640;
+  --rij-hover: #242D49;                 /* NIEUW — 1,17:1 tegen een gewone rij */
 
   --tekst: #E7EBF7;
   --tekst-zacht: #AEB8D6;
@@ -111,28 +365,81 @@ html[data-thema="donker"] {
 
   --rand: #2C3552;
   --rand-sterk: #3E4A72;
+  --rand-zacht: #262E48;                /* NIEUW */
+  --rand-control: #616FA0;              /* NIEUW — 3,05:1 op het slechtste oppervlak */
 
   /* Op donker draaien de contrastverhoudingen om: het donkere groen en rood
      van het lichte thema zijn hier onleesbaar, dus die gaan omhoog in helderheid. */
   --op: #35DFA6;
+  --vlak-op: #123830;                   /* NIEUW */
   --neer: #FF8E7E;
   --waarschuwing: #E8B25C;
   --waarschuwing-rand: #C08A34;
 
-  --kopkleur: #E8ECF8;
-  --accent-sterk: #4A5C9E;
-  --accent-sterk-hover: #586BB2;
-  --accent-tekst: #FFFFFF;
-  --plaat: #EDF0F9;
+  --focus: #93A2D6;                     /* NIEUW */
+
+  /* NIEUW — dezelfde zes posities, opnieuw gekozen voor een donkere kaart.
+     Niet afgeleid uit het lichte thema: #2C3A6B als lijn op #1A2138 haalt
+     1,46:1 en is onzichtbaar. */
+  --reeks-1: #93A2D6;
+  --reeks-2: #35DFA6;
+  --reeks-3: #A99BE0;
+  --reeks-4: #6E7CB0;
+  --reeks-5: #E0A06A;
+  --reeks-6: #5FC5D6;
 
   /* Betaald is in het lichte thema navy; op een donkere pagina valt dat weg
      tegen de achtergrond. De hele reeks schuift daarom omhoog, met dezelfde
      aflopende volgorde als in het licht: betaald het sterkst, overig het
      zwakst. Zonder die volgorde wisselen de kanalen in de balk van gewicht. */
-  --kanaal-betaald: #93A2D6;
-  --kanaal-email: #6E7CB0;
+  --kanaal-organisch: var(--reeks-2);
+  --kanaal-betaald: var(--reeks-1);
+  --kanaal-email: var(--reeks-4);
   --kanaal-direct: #4E5C8E;
   --kanaal-overig: #333F63;
+
+  --kopkleur: #E8ECF8;
+  /* GEWIJZIGD — was #4A5C9E. Op dat vlak haalde mint 3,14:1: een deltacijfer
+     in mint op een gevulde KPI-kaart was daarmee onleesbaar, en dat is precies
+     waar --accent-op-vlak voor bestaat. Dit is de bovengrens — één stap
+     lichter en mint zakt weer onder 4,5:1. Het vlak blijft met 1,76:1
+     onderscheidbaar van een gewone kaart; dat verschil draagt geen informatie
+     (de kaart heeft zijn eigen label en waarde) en heeft dus geen 3:1-eis.
+     ⚠ Dit raakt ook de marketingkalender: de actieve chip en de melding worden
+     daar in het donkere thema een tint donkerder. */
+  --accent-sterk: #384678;
+  --accent-sterk-hover: #43538C;
+  --accent-tekst: #FFFFFF;
+  /* GEWIJZIGD 11-09-2026, tweede ronde -- was #D3DBEE (6,42:1). Meeverhoogd
+     met het lichte thema, zodat de balk in beide thema's dezelfde verhouding
+     houdt tussen het witte woordmerk en de gedempte tekst ernaast. 7,00:1. */
+  --accent-tekst-zacht: #DDE4F4;
+  --accent-op-vlak: var(--op);          /* NIEUW — het lichtere mint, want het vlak is hier lichter */
+  /* NIEUW — het gevulde vlak is in dit thema --accent-sterk (#384678) en dus
+     lichter dan de navy van het lichte thema; beide gaan daarom omhoog.
+
+     Hoevéél omhoog is niet op het oog bepaald maar door de controle: de eerste
+     poging (#7ED2AE / #F8B0A6) haalde op --accent-sterk keurig 4,9:1 en zakte
+     op --accent-sterk-hover (#43538C) naar 4,10:1. Dat is de val van dit thema
+     -- het hover-vlak is hier lichter dan het rustvlak, waar het in het lichte
+     thema juist donkerder is, dus hover is hier de strengere van de twee.
+     Opnieuw op luminantie gelijkgelegd: 0,6075 tegen 0,5997. */
+  --op-op-vlak: #90DCBC;
+  --neer-op-vlak: #FABDB3;
+  --lavendel-tekst: #A9B4DA;            /* NIEUW */
+  --plaat: #EDF0F9;
+  /* NIEUW 14-09-2026 — hier gebeurt het: de balk is in dit thema een verhoogd
+     VLAK en geen merkvlak meer. --accent-sterk blijft ongemoeid navy voor de
+     gevulde chip en de melding. De hover is --rij-hover: dat is precies de rol
+     "één stap lichter dan het vlak eronder" en het is al nagerekend (1,16:1,
+     zichtbaar zonder te schreeuwen). */
+  --balk: var(--surface);
+  --balk-hover: var(--rij-hover);
+
+  /* NIEUW — blijven licht/donker, net als --plaat. Iets zachter dan puur wit,
+     want een wit vlak op een donkere pagina snijdt. Navy erop: 9,58:1. */
+  --tegel-op-vlak: #EDF0F9;
+  --tegel-op-vlak-tekst: #2C3A6B;
 
   --vlak-waarschuwing: #2C2417;
   --rand-waarschuwing-zacht: #4A3B1E;
@@ -146,5 +453,6 @@ html[data-thema="donker"] {
 
 
   --schaduw: 0 1px 2px rgba(0, 0, 0, .40), 0 6px 20px rgba(0, 0, 0, .34);
+  --schaduw-midden: 0 2px 6px rgba(0, 0, 0, .45), 0 10px 28px rgba(0, 0, 0, .42);
   --schaduw-hoog: 0 8px 28px rgba(0, 0, 0, .50);
 }
