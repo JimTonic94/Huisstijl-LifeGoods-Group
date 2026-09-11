@@ -8,8 +8,13 @@ Geen buildstap, geen npm, geen submodule.
 Haal het bestand op in de map van je app:
 
 ```bash
-curl -sO https://raw.githubusercontent.com/<org>/lifegoods-huisstijl/main/huisstijl.css
+curl -sO https://raw.githubusercontent.com/JimTonic94/Huisstijl-LifeGoods-Group/main/huisstijl.css
 ```
+
+Deze repo staat bewust publiek: dan heeft dat commando geen token nodig en kan
+elk dashboard hem ophalen. Er staat niets vertrouwelijks in — kleuren en
+fontnamen zijn zichtbaar in de CSS van elke gepubliceerde site. Zet je hem op
+privé, dan breekt de synchronisatie in elk dashboard stil.
 
 Commit die kopie mee. Laad hem vóór je eigen stylesheet:
 
