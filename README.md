@@ -1,7 +1,7 @@
 # LifeGoods Group — huisstijl
 
 Eén bestand: `huisstijl.css`. Kleuren en fonts voor alle dashboards, als CSS-tokens.
-Geen buildstap, geen npm, geen submodule.
+Geen buildstap, geen npm, geen submodule. lol
 
 ## Gebruiken in een dashboard
 
