@@ -42,6 +42,20 @@ Niet: opmaakregels (knoppen, tabellen, roosters) en tokens die maar één app
 kent — baankleuren van de marketingkalender bijvoorbeeld. Die horen in de
 `styles.css` van die app, ná deze.
 
+## Logo
+
+In `logos/` staat het LifeGoods Group-logo (tweeregelig "LifeGoods Group") in twee varianten,
+allebei PNG met transparante achtergrond:
+
+| Bestand | Gebruik |
+|---|---|
+| `logos/lifegoods-group.png` | navy, op lichte vlakken (koppen van dashboards, witte plaat) |
+| `logos/lifegoods-group-wit.png` | wit, op navy of donkere vlakken (omslagen, decks, donker thema) |
+
+Dit is het enige logo voor de groep; het oudere kleine-letters-wordmark ("lifegoods group") wordt
+niet meer gebruikt. Kopieer het bestand in de map van je app zoals `huisstijl.css`, en gebruik
+geen CSS-filter om navy wit te maken als de witte variant er ligt.
+
 ## Twee afspraken
 
 - `huisstijl.css` laadt vóór `styles.css`.
